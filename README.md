@@ -1,8 +1,4 @@
-# Work Attitudes and Job Hunting Insights
-
-## About Me
-
-A brief introduction about the author and their interest in exploring attitudes toward work and the job-hunting process through data science.
+# Work Attitudes and Job Hunting Insights from social media based on Twitter
 
 ## Code
 
