@@ -1,0 +1,90 @@
+
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>501 Project (Conclusion)</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-loading">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<a href="index.html" class="logo">Zijing Cheng(Mavis, zc233)</a>
+						<p> Notes: If you can not find the menu button you want, you can make your webpage narrower, then you can find the menu button in the upper right corner.</p>
+					</header>
+
+				<!-- Nav -->
+					<nav id="nav">
+						<ul class="links">
+							<li><a href="index.html">Home</a></li>
+                            <li><a href="aboutme.html">About me</a></li>
+							<li><a href="https://github.com/anly501/anly-501-project-mavischengoTATo/tree/main/codes">Code</a></li>
+							<li><a href="https://github.com/anly501/anly-501-project-mavischengoTATo/tree/main/data">Data</a></li>
+							<li><a href="introduction.html">Introduction</a></li>
+							<li><a href="datagathering.html">Data Gathering</a></li>
+              				<li><a href="datacleaning.html">Data Cleaning(Python)</a></li>
+							<li><a href="datacleaning1.html">Data Cleaning(R)</a></li>
+							<li><a href="exploringdata.html">Exploring Data</a></li>
+							<li><a href="nb.html">Naive Bayes(Python)</a></li>
+              				<li><a href="nb1.html">Naive Bayes(R)</a></li>
+							<li><a href="dt.html">Decision Trees</a></li>
+              				<li><a href="svm.html">SVM</a></li>
+							<li><a href="clustering.html">Clustering</a></li>
+							<li><a href="arm.html">ARM and Networking</a></li>
+							<li class="active"><a href="conclusion.html">Conclusions</a></li>
+
+						</nav>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Post -->
+							<section class="post">
+								<header class="major">
+									<h1>Conclusion<br />
+									</h1>
+								</header>
+									<p>Throughout the project, we focused on the word "work", explored the views of different people on work on the basis of Twitter data, and also conducted a study on job descriptions and compensation based on existing databases. We hope to answer many of the questions we raised at the beginning one by one. In the introduction, we raised ten questions, and we adopted different methods to solve these problems. Here we will summarize and describe in turn.</p>
+                                    <p>First of all, we did not solve all the ten problems raised. First of all, for the first and second questions, we explored the relationship between the working hours, the working departments, and the nature of the work itself. But when we cleaned the data, we found that there were too few variables in this data, and when recording the nature of the work, such as the title of the work, there was a lot of inconsistency, and the amount of data was too large, Therefore, it is almost impossible for us to process manually. Finally, we choose not to use this data, so we cannot answer this question. However, we hope to continue to explore these two questions in the future by collecting data that updates more variables.</p>
+                                    <p>Secondly, for the third and fourth questions, we used naive Bayes to conduct a text analysis of the job description, but after analysis, we found that the results were not good. After observation, a big problem was data imbalance. This problem is also the primary reason for our poor results. So from this level, we can't make a clear judgment on the job title and salary through job description, because only about 5% of the data set we collected are the high salary we judged. Of course, everyone has different views on the salary level. But in real life, there is very little recruitment information willing to give the salary range, and people are more willing to interview, Or negotiate salary in a confidential way. Therefore, we cannot draw conclusions from the job description. At the same time, because there are many ways to copy and paste in real life, for example, hr often gives the same job description to different positions, and the only difference is in the scope of little work experience, which cannot be detected by the model. Therefore, for recruitment information, if people do not want to make a major innovation in real life, it is difficult to solve it through text analysis.</p>
+                                    <p>Secondly, in the process of the whole project, we also found that the company also has a very unclear division of job titles and job levels. Similar job descriptions of the same company have completely different position levels, and the data is cumbersome. For example, what kind of title is senior or what kind of title is entry level, which requires manual division, So we finally chose to ignore this problem. What can be suggested is that people can go to more formal recruitment websites to obtain information, rather than relying solely on the job or job description written by HR. Formal recruitment websites will have a series of options for HR to choose from. If such data can be crawled, I believe it can solve the problems we mentioned earlier.</p>
+                                    <p>Finally, we studied Twitter data, and this problem runs through the whole process. We analyzed this problem in all tabs, hoping to find the best model to fit the text information of Twitter, and hope to get work related information from it. In general, the above results show us that we can judge whether such tweets can be forwarded and attract people's attention through the analysis of tweets. The tweets forwarded are similar in terms of vocabulary. From the above results, it can be seen that by using the same words and similar word frequencies as tweets that have been forwarded many times, it can effectively help people to obtain forwarding without being ignored.                                        
+                                    </p>
+                                    <p>As a popular social media, Twitter can not only enhance people's sense of social belonging, but also help them gain attention, reputation, fans and profits if they can get more forwarding volume and attention. In such an information age, it is beneficial for platforms and blogs to gain more attention.
+                                    </p>
+                                    <p>Such research makes me more confident to observe the impact of the text itself on improving the quality of user accounts by comparing the growth of the text itself with the number of users' fans and the number of users' tweets
+                                    </p>
+                                    <p> In general, the project is more like a data science attempt. At the beginning, the idea was very full, but when implementing, we will encounter various problems. Maybe the model is not good enough, and maybe the data is not complete. But in the future, we can improve this attempt through more and more in-depth learning.</p>
+
+
+
+
+
+
+
+
+						</section>
+						<section class="split contact">
+								<h3>Email</h3>
+								<p><a href="#">zc233@georgetown.edu</a></p>
+							</section>
+						</section>
+					</footer>
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/skel.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

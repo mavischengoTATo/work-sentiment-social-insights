@@ -1,0 +1,83 @@
+---
+title: "Naive Bayes"
+author: "Zijing Cheng zc233"
+date: "2022-10-11"
+output: html_document
+---
+
+```{r}
+library(naivebayes)
+library(tidyverse)
+library(ggplot2)
+library(psych)
+df = read.csv("cleaned_data_r.csv")
+df=df%>%mutate(retweeted = ifelse(retweet_count>0, T, F))
+df = df[,-c(1,2)]
+```
+
+## Let's take a look of labeled record data in R part.
+```{r}
+head(df)
+```
+
+
+### Data preparation includes extracting dependent variable, retweeted, whether the tweet is retweeted or not and independent variables, as it shows below. And it also includes the process of spliting training and testing sets. And I split the labeled text data into train and test with 70% trainning ratio.
+```{r}
+set.seed(1)
+ind <- sample(2, nrow(df), replace = T, prob = c(0.7, 0.3))
+train <- df[ind == 1,]
+test <- df[ind == 2,]
+```
+
+##Train the Naive Bayes model
+### In this method, the assumption of Naive Bayes assumption is that each feature makes an independent and equal contribution to the outcome. So the main idea is that  we create a classifier model then we find the probability of given set of inputs for all possible values of the class variable. and pick up the output with maximum probability. The output means the class with higher probability.  And the outputs will show whether these inputs are a good way to make prediction, or, classification.
+```{r}
+model <- naive_bayes(retweeted ~ ., data = train, usekernel = T,laplace = 1)
+```
+
+```{r}
+p <- predict(model, train[,-5], type = 'prob')
+head(cbind(p, train))
+```
+
+```{r}
+p1 <- predict(model, train[,-5])
+tab1 <- table(p1, train$retweeted)
+print(tab1)
+1 - sum(diag(tab1)) / sum(tab1)
+```
+
+
+```{r}
+p2 <- predict(model, test[,-5])
+(tab2 <- table(p2, test$retweeted))
+1 - sum(diag(tab2)) / sum(tab2)
+
+```
+
+### From the above tables, we can conclude that the misclassification ratio is around 59%, which is very bad, as the expecation of randomly choose is 0.5. So it is not a good way to classify which tweet is retweeted. And from the prediction of test data, we can find that the misclassifictaion ratio is worse.
+### Testing model accuracy is around 34%, which is a really bad. This method is not suitable for this question. And the ROC plot below also shows that the roc-auc score is 0.5, which indicates that this method is not suitable for this data set and question. The same conclusion comes from the confusion matrix below, we can find that the classifer give all FALSE to test data. This is ridiculous so we can modify this method in the future.
+
+```{r}
+library(pROC)
+testy = ifelse(test[,5]==T,1,0)
+p2 = ifelse(p2==T,1,0)
+modelroc <- roc(testy,p2)
+plot(modelroc, print.auc=TRUE, auc.polygon=TRUE, grid=c(0.1, 0.2),
+     grid.col=c("green", "red"), max.auc.polygon=TRUE,
+     auc.polygon.col="skyblue", print.thres=TRUE,main = "ROC-AUC Curve")
+```
+
+```{r}
+TClass <- factor(c(0, 0, 1, 1))
+PClass <- factor(c(0, 1, 0, 1))
+Y      <- c(0, 11, 0, 21)
+df <- data.frame(TClass, PClass, Y)
+library(ggplot2)
+ggplot(data =  df, mapping = aes(x = TClass, y = PClass)) +
+  geom_tile(aes(fill = Y), colour = "white") +
+  geom_text(aes(label = sprintf("%1.0f", Y)), vjust = 1) +
+  scale_fill_gradient(low = "skyblue", high = "red") +
+  theme_bw() + theme(legend.position = "none")+ggtitle("Confusion Matrix")
+```
+

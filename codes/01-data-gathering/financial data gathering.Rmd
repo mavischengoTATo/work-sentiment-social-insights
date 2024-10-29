@@ -1,0 +1,28 @@
+---
+title: "Data Gathering"
+author: "Zijing Cheng zc233"
+date: "2022-09-14"
+output: html_document
+---
+
+```{r}
+library(Tushare)
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(plotly)
+
+pro = pro_api(token = token)
+name = c("300521.SZ", "300662.SZ","600588.SH","300131.SZ","603118.SH")
+dd = {}
+for (i in name){
+  df = pro(api_name = 'daily',ts_code =i,start_date = '20220101',end_date = '20220630')
+  df = df[,c(1,2,6)]
+  dd =rbind(dd,df)
+}
+dd$trade_date=as.Date(dd$trade_date,"%Y%m%d")
+dd$close = as.numeric(dd$close)
+dd = spread(dd,ts_code,close)
+head(dd,10)
+```
+

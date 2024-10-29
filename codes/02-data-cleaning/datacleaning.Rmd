@@ -1,0 +1,109 @@
+---
+title: "Data Cleaning"
+author: "Zijing Cheng zc233"
+date: "2022-09-28"
+output: html_document
+---
+
+### The second part is the R method. It will include the data cleaning process of varibales about user, the poster from Twitter to see how characteristics of poster influence the retweet of a tweet, which shows if a tweet is widely recognized by people or not. The label of retweeted can be find in "textcleaning_py1.csv" in "Data" Tab. If you want to get the data, you can come back to "Home" click the "Data" tab in the menu, and if you want to get the code, you can just copy it from below, or you can come back to "Home" and get it by clicking the "Code" tab in the menu.
+### And This part is for R 
+
+```{r}
+library(tidyverse)
+raw_data = read.csv("/Users/xiaocheng/Downloads/raw_data.csv")
+library(tidyverse)
+```
+
+### select the variables I need 
+```{r}
+raw_data  = raw_data %>% mutate(id = as.character(id))
+r = raw_data %>% select(id, truncated, retweet_count,favorite_count,favorited,lang,user)
+```
+
+### This is a quick look of raw data
+```{r}
+head(r)
+```
+
+### deal with "user" column, which is a mixed string containing a lot of information about the poster. So I will use "stringr" package to find useful information. In this part, I use regular expressions to find the corresponding results.
+
+### find the number of followers of posters
+```{r}
+library(stringr)
+r1 = r %>% mutate(followers_count = str_extract_all(user, pattern ="'followers_count': [:digit:]")) %>% mutate(followers_count=str_extract_all(followers_count, pattern ="[:digit:]"))
+```
+
+### find the number of friends of posters
+```{r}
+r1 = r1 %>% mutate(friends_count = str_extract_all(user, pattern ="'friends_count': [:digit:]")) %>% mutate(friends_count=str_extract_all(friends_count, pattern ="[:digit:]"))
+```
+
+### find the number of favourites of posters
+```{r}
+r1 = r1 %>% mutate(favourites_count = str_extract_all(user, pattern ="'favourites_count': [:digit:]")) %>% mutate(favourites_count=str_extract_all(favourites_count, pattern ="[:digit:]"))
+```
+
+
+### find whether posters have extended profile
+```{r}
+r1 = r1 %>% mutate(has_extended_profile = str_extract_all(user, pattern ="'has_extended_profile': False"))  %>% mutate(has_extended_profile = ifelse(nchar(has_extended_profile)==29, FALSE, TRUE))
+r1 = r1 %>% select(-user)
+r1$followers_count = as.numeric(r1$followers_count)
+r1$friends_count = as.numeric(r1$friends_count)
+r1$favourites_count = as.numeric(r1$favourites_count)
+```
+
+```{r}
+head(r1)
+```
+
+
+### And here we also need to clean the data we collect from data.world website.
+```{r}
+dd = read.csv("/Users/xiaocheng/Downloads/data_scientist_united_states_job_postings_jobspikr.csv")
+```
+
+### Select the column we need
+```{r}
+d = dd %>% select(job_title,job_description,salary_offered)
+d = d %>% mutate(salary = substr(salary_offered,1,5))
+d %>% group_by(salary)%>% summarise(n=n())
+```
+
+Here, as we can see, most of the data are null values. In the later analysis, we need to use the classification model, so we use the minimum wage as the basis for division. We regard the minimum wage below 80000 dollars as low wages, and those above 80000 dollars as high wages. When the salary information is not included in the recruitment information, it is determined as low income by default because the salary is not attractive.
+
+```{r}
+d = d %>% mutate(pay = ifelse((salary == "$100,"|salary == "$100k"|salary == "$100K"|salary == "$1200"|salary == "$120K"|salary == "$130K"|salary == "$150K"|salary == "$150k"|salary == "$200K"|salary == "$250K"|salary == "$80K"|salary == "$85k"|salary == "90K"),"High","Low"))
+```
+
+
+```{r}
+d = d %>% select(job_title,job_description,pay)%>%na.omit()
+write.csv(d,file = "job_description.csv")
+```
+
+
+Then, we also need to use R to clean the data that will be used to analysis the relationship between the nature of job and the salary.
+```{r}
+b = read.csv("/Users/xiaocheng/Downloads/employee-compensation-report-calendar-year-2021-6.csv")
+
+```
+
+Select the columns we need
+```{r}
+b1 = b %>% select(Name, Department, Job.Title, Full.Part.Time,Hire.Date,Termination.Date, Hourly.Rate, Regular.Pay)
+```
+
+Here we need to get the working years, but as we can see the Termination.Date has a lot of Null, because these workers are still on the job. So we use the deadline for data collection is used as the basis for our calculation of working years in the unit of weeks.
+```{r}
+head(b1)
+b1 = b1 %>% mutate(Termination.Date = ifelse(Termination.Date=="","6/30/2021",Termination.Date))
+b1 = b1 %>% mutate(Hire.Date = as.Date(Hire.Date,"%m/%d/%Y"),Termination.Date = as.Date(Termination.Date,"%m/%d/%Y"))
+b1 = b1 %>% mutate(workyear = as.numeric(difftime(Termination.Date,Hire.Date,units = "weeks")))
+
+```
+
+```{r}
+write.csv(b1,file = "jobnature.csv")
+```
+
